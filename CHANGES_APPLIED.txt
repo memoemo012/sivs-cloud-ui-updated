@@ -1,0 +1,29 @@
+Applied changes:
+
+1. ESP32 buzzer
+- Added buzzer support on GPIO 32.
+- Face failure: 1 long beep.
+- Fingerprint failure: 2 short beeps.
+- Voice failure: 3 short beeps.
+- Connect an active buzzer module to GPIO 32, VCC, and GND.
+
+2. User website UI
+- Removed bottom navigation bar.
+- Added top navigation similar to admin.
+- Added Support to the top bar.
+- Moved Logout to the top bar.
+- Removed Support from the user settings page.
+- Added a dedicated user support page with issue type + description form.
+
+3. Settings pages
+- Removed manual save buttons from user/admin settings.
+- Settings now auto-save on change.
+- Removed the top notification/settings label from the settings pages.
+- Removed the admin profile info block from admin settings.
+
+4. Language handling
+- Main updated user/admin settings + support flow now follows the selected language.
+- Dynamic log/alert text in updated user pages is translated when possible.
+
+5. Project package
+- This export is source-only. Run npm install before starting the Node.js app.

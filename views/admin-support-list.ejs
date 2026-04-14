@@ -1,0 +1,20 @@
+<%- include('partials/header', { title: t('supportRequests') }) %>
+<section class="panel">
+  <div class="panel-head">
+    <div><h2><%= t('supportRequests') %></h2></div>
+  </div>
+  <div class="list-grid">
+    <% if (!tickets.length) { %><p><%= t('noTickets') %></p><% } %>
+    <% tickets.forEach(ticket=>{ %>
+      <a href="/admin/support/<%= ticket.id %>" class="ticket-row">
+        <div>
+          <strong>#<%= ticket.id %> - <%= ticket.requester_name %></strong>
+          <p><%= ticket.subject || '-' %></p>
+          <span class="mini"><%= ticket.created_at %></span>
+        </div>
+        <div><span class="badge <%= ticket.status==='NEW'?'new':(ticket.status==='IN_PROGRESS'?'progress':'solved') %>"><%= mapStatus(ticket.status) %></span></div>
+      </a>
+    <% }) %>
+  </div>
+</section>
+<%- include('partials/footer') %>

@@ -1,0 +1,58 @@
+<%
+  const safeAlerts = Array.isArray(alerts) ? alerts : [];
+  function severityClass(value) {
+    if (value === 'HIGH') return 'high';
+    if (value === 'MEDIUM') return 'medium';
+    return 'low';
+  }
+
+  function statusClass(value) {
+    if (value === 'NEW') return 'new';
+    if (value === 'IN_PROGRESS') return 'progress';
+    if (value === 'SOLVED') return 'solved';
+    return 'progress';
+  }
+%>
+
+<%- include('partials/header', { title: t('alerts') }) %>
+
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h2><%= t('alerts') %></h2>
+    </div>
+
+    <div class="filters">
+      <a href="/admin/alerts"><%= t('filterAll') %></a>
+      <a href="/admin/alerts?status=NEW"><%= t('filterNew') %></a>
+      <a href="/admin/alerts?status=IN_PROGRESS"><%= t('filterInProgress') %></a>
+      <a href="/admin/alerts?status=SOLVED"><%= t('filterSolved') %></a>
+    </div>
+  </div>
+
+  <% if (safeAlerts.length === 0) { %>
+    <div class="empty-state">
+      <h3><%= t('noAlerts') %></h3>
+    </div>
+  <% } else { %>
+    <div class="list-grid">
+      <% safeAlerts.forEach(function(alert) { %>
+        <a href="/admin/alerts/<%= alert.id %>" class="alert-card">
+          <div>
+            <strong><%= rt(alert.title || '-') %></strong>
+            <p><%= rt(alert.subtitle || '-') %></p>
+            <span class="mini"><%= alert.device_name || '-' %> • <%= alert.user_name || '-' %></span>
+          </div>
+
+          <div>
+            <span class="badge <%= severityClass(alert.severity) %>"><%= mapSeverity(alert.severity) %></span>
+            <div class="spacer"></div>
+            <span class="badge <%= statusClass(alert.status) %>"><%= mapStatus(alert.status) %></span>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,12 @@
+<%- include('partials/header', { title: role === 'admin' ? t('adminLogin') : t('userLogin') }) %>
+<section class="panel narrow">
+  <div class="panel-head">
+    <h2><%= role === 'admin' ? t('adminLogin') : t('userLogin') %></h2>
+  </div>
+  <form method="post" action="/login/<%= role %>" class="form-grid">
+    <input name="contact" placeholder="<%= t('emailOrContact') %>" required />
+    <input type="password" name="password" placeholder="<%= t('password') %>" required />
+    <button class="btn-gradient" type="submit"><%= t('login') %></button>
+  </form>
+</section>
+<%- include('partials/footer') %>

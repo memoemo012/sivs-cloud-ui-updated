@@ -1,0 +1,11 @@
+<%- include('partials/header', { title: t('home') }) %>
+<section class="hero-card hero-card-single">
+  <div class="hero-text hero-text-centered">
+    <h2><%= t('loginType') %></h2>
+    <div class="hero-chooser">
+      <a class="btn-gradient" href="/login/user"><%= t('user') %></a>
+      <a class="btn-soft" href="/login/admin"><%= t('admin') %></a>
+    </div>
+  </div>
+</section>
+<%- include('partials/footer') %>

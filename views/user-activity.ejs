@@ -1,0 +1,20 @@
+<%- include('partials/header', { title: t('accountActivity') }) %>
+<div class="mobile-shell">
+  <section class="panel">
+    <div class="panel-head"><h2><%= t('accessLogs') %></h2></div>
+    <div class="list-grid">
+      <% if (!logs.length) { %><p><%= t('noLogs') %></p><% } %>
+      <% logs.forEach(log => { %>
+        <div class="ticket-row static">
+          <div>
+            <strong><%= log.user_name %></strong>
+            <p><%= rt(log.reason) %></p>
+            <span class="mini"><%= log.created_at %></span>
+          </div>
+          <div><span class="badge <%= log.result==='SUCCESS'?'solved':'high' %>"><%= mapResult(log.result) %></span></div>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+</div>
+<%- include('partials/footer') %>

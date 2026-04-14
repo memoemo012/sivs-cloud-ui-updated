@@ -1,0 +1,179 @@
+<%
+  function stateLabel(value) {
+    if (value === 'OK') return t('goodWorking');
+    if (value === 'FAIL') return t('needsCheck');
+    return t('noData');
+  }
+
+  function stateClass(value) {
+    if (value === 'OK') return 'ok';
+    if (value === 'FAIL') return 'bad';
+    return 'off';
+  }
+
+  function formatAge(sec) {
+    if (sec === null || typeof sec === 'undefined') return '-';
+    if (sec < 60) return sec + ' ' + t('secondsUnit');
+    if (sec < 3600) return Math.floor(sec / 60) + ' ' + t('minutesUnit');
+    return Math.floor(sec / 3600) + ' ' + t('hoursUnit');
+  }
+%>
+
+<%- include('partials/header', { title: t('esp32Health') }) %>
+
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h2><%= t('esp32Monitor') %></h2>
+      <p class="muted"><%= t('healthPageSubtitle') %></p>
+    </div>
+
+    <% if (health) { %>
+      <div class="row-actions">
+        <span class="badge <%= health.onlineNow ? 'on' : 'off' %>"><%= health.onlineNow ? t('onlineNow') : t('offlineNow') %></span>
+        <span class="badge <%= health.overallHealthy ? 'solved' : 'progress' %>"><%= health.overallHealthy ? t('healthy') : t('degraded') %></span>
+      </div>
+    <% } %>
+  </div>
+
+  <% if (!health) { %>
+    <div class="empty-state">
+      <h3><%= t('noHealthData') %></h3>
+    </div>
+  <% } else { %>
+
+    <div class="stats-grid" style="margin-bottom: 22px;">
+      <div class="stat-card">
+        <span class="mini"><%= t('overallStatus') %></span>
+        <strong><%= health.onlineNow ? t('online') : t('offline') %></strong>
+      </div>
+
+      <div class="stat-card">
+        <span class="mini"><%= t('lastHeartbeat') %></span>
+        <strong><%= health.last_heartbeat || '-' %></strong>
+      </div>
+
+      <div class="stat-card">
+        <span class="mini"><%= t('heartbeat') %></span>
+        <strong><%= formatAge(health.heartbeatAgeSec) %></strong>
+      </div>
+
+      <div class="stat-card">
+        <span class="mini"><%= t('condition') %></span>
+        <strong><%= health.overallHealthy ? t('healthy') : t('degraded') %></strong>
+      </div>
+    </div>
+
+    <div class="details-grid">
+      <div class="detail-card">
+        <div class="card-head-inline">
+          <div>
+            <h3><%= t('controlUnit') %></h3>
+          </div>
+          <span class="badge <%= stateClass(health.esp32State) %>"><%= stateLabel(health.esp32State) %></span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="card-head-inline">
+          <div>
+            <h3><%= t('faceSensor') %></h3>
+          </div>
+          <span class="badge <%= stateClass(health.faceState) %>"><%= stateLabel(health.faceState) %></span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="card-head-inline">
+          <div>
+            <h3><%= t('fingerSensor') %></h3>
+          </div>
+          <span class="badge <%= stateClass(health.fingerState) %>"><%= stateLabel(health.fingerState) %></span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="card-head-inline">
+          <div>
+            <h3><%= t('voiceSensor') %></h3>
+          </div>
+          <span class="badge <%= stateClass(health.voiceState) %>"><%= stateLabel(health.voiceState) %></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="details-grid" style="margin-top: 24px;">
+      <div class="detail-card">
+        <h3><%= t('monitoredDeviceData') %></h3>
+
+        <div class="detail-item">
+          <strong>Code</strong>
+          <div class="mini"><%= health.device_code || health.linked_device_code || '-' %></div>
+        </div>
+
+        <div class="detail-item">
+          <strong><%= t('deviceName') %></strong>
+          <div class="mini"><%= health.device_name || '-' %></div>
+        </div>
+
+        <div class="detail-item">
+          <strong><%= t('location') %></strong>
+          <div class="mini"><%= health.device_location || '-' %></div>
+        </div>
+
+        <div class="detail-item">
+          <strong><%= t('type') %></strong>
+          <div class="mini"><%= health.device_type || '-' %></div>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <h3><%= t('networkConnectionData') %></h3>
+
+        <div class="detail-item">
+          <strong>IP Address</strong>
+          <div class="mini"><%= health.ip_address || '-' %></div>
+        </div>
+
+        <div class="detail-item">
+          <strong>Wi-Fi SSID</strong>
+          <div class="mini"><%= health.wifi_ssid || '-' %></div>
+        </div>
+
+        <div class="detail-item">
+          <strong><%= t('lastHeartbeat') %></strong>
+          <div class="mini"><%= health.last_heartbeat || '-' %></div>
+        </div>
+
+        <div class="detail-item">
+          <strong><%= t('websiteStatus') %></strong>
+          <div class="mini"><%= health.onlineNow ? t('onlineNow') : t('offlineNow') %></div>
+        </div>
+      </div>
+    </div>
+
+  <% } %>
+</section>
+
+<style>
+  .card-head-inline{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .detail-card h3{
+    margin:0 0 8px 0;
+  }
+  .detail-item{
+    margin-top:14px;
+    padding-top:10px;
+    border-top:1px solid rgba(0,0,0,0.05);
+  }
+  .detail-item strong{
+    display:block;
+    margin-bottom:6px;
+  }
+</style>
+
+<%- include('partials/footer') %>

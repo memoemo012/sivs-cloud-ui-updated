@@ -1,0 +1,8 @@
+Additional UI cleanup applied:
+- removed biometric lock row from admin settings
+- removed autosave hint text from settings pages
+- removed brand/support helper text from user settings/support
+- removed user dashboard tab from top navigation
+- user login opens profile page
+- removed admin dashboard welcome subtitle
+- localized more admin/user pages for Arabic/English

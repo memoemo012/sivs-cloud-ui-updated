@@ -1,0 +1,70 @@
+<%- include('partials/header', { title: t('devicesManagement') }) %>
+<section class="panel">
+  <div class="panel-head"><h2><%= t('addDevice') %></h2></div>
+  <form method="post" action="/admin/devices/add" class="form-grid three">
+    <input name="name" placeholder="<%= t('deviceName') %>" required />
+    <input name="type" placeholder="<%= t('type') %>" required />
+    <input name="location" placeholder="<%= t('location') %>" required />
+    <button class="btn-gradient"><%= t('addDevice') %></button>
+  </form>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h2><%= t('devicesManagement') %></h2>
+    </div>
+  </div>
+  <div class="list-grid">
+    <% if (!devices.length) { %><p><%= t('noDevices') %></p><% } %>
+    <% devices.forEach(device=>{ %>
+      <div class="device-card device-open-card" data-device-id="<%= device.id %>">
+        <div>
+          <strong><%= device.name %></strong>
+          <p><%= device.location %></p>
+          <span class="mini"><%= device.device_code %></span>
+        </div>
+        <div>
+          <span class="badge <%= device.is_online?'on':'off' %>"><%= device.is_online ? t('online') : t('offline') %></span>
+          <div class="spacer"></div>
+          <span class="badge <%= device.is_active?'solved':'progress' %>"><%= device.is_active ? t('active') : t('suspended') %></span>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<div class="modal-overlay" id="deviceHealthModal" hidden>
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="panel-head modal-head-tight">
+      <h3><%= t('healthDeviceTitle') %></h3>
+      <button type="button" class="btn-soft" id="closeDeviceHealthModal"><%= t('closeDialog') %></button>
+    </div>
+    <% if (health) { %>
+      <div class="summary-list">
+        <div class="summary-item"><span>ESP32</span><strong><%= health.esp32_ok ? 'OK' : 'FAIL' %></strong></div>
+        <div class="summary-item"><span><%= t('faceSensor') %></span><strong><%= health.face_ok ? 'OK' : 'FAIL' %></strong></div>
+        <div class="summary-item"><span><%= t('fingerSensor') %></span><strong><%= health.finger_ok ? 'OK' : 'FAIL' %></strong></div>
+        <div class="summary-item"><span><%= t('voiceSensor') %></span><strong><%= health.voice_ok ? 'OK' : 'FAIL' %></strong></div>
+        <div class="summary-item"><span><%= t('lastHeartbeat') %></span><strong><%= health.last_heartbeat || '-' %></strong></div>
+        <div class="summary-item"><span>IP</span><strong><%= health.ip_address || '-' %></strong></div>
+        <div class="summary-item"><span>Wi-Fi</span><strong><%= health.wifi_ssid || '-' %></strong></div>
+      </div>
+    <% } else { %>
+      <p class="muted"><%= t('noHealthData') %></p>
+    <% } %>
+  </div>
+</div>
+<script>
+  const deviceModal = document.getElementById('deviceHealthModal');
+  const closeDeviceModal = document.getElementById('closeDeviceHealthModal');
+  document.querySelectorAll('.device-open-card').forEach(card => {
+    card.addEventListener('click', () => {
+      deviceModal.hidden = false;
+    });
+  });
+  closeDeviceModal?.addEventListener('click', ()=> deviceModal.hidden = true);
+  deviceModal?.addEventListener('click', (e)=>{ if(e.target===deviceModal) deviceModal.hidden = true; });
+</script>
+<%- include('partials/footer') %>

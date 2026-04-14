@@ -1,0 +1,21 @@
+<%- include('partials/header', { title: t('details') }) %>
+<section class="panel">
+  <div class="panel-head">
+    <h2><%= device.name %></h2>
+    <a class="btn-soft" href="/admin/devices"><%= t('back') %></a>
+  </div>
+  <div class="detail-grid">
+    <div class="detail-item"><strong><%= t('deviceId') %></strong><div><%= device.device_code %></div></div>
+    <div class="detail-item"><strong><%= t('location') %></strong><div><%= device.location %></div></div>
+    <div class="detail-item"><strong><%= t('type') %></strong><div><%= device.type %></div></div>
+    <div class="detail-item"><strong><%= t('latestStatus') %></strong><div><%= device.is_online ? t('online') : t('offline') %></div></div>
+  </div>
+  <article class="message-box">
+    <strong><%= t('generalStatus') %>:</strong> <%= device.is_active ? t('active') : t('suspended') %><br>
+    <strong><%= t('lastSeen') %>:</strong> <%= device.last_seen || '-' %>
+  </article>
+  <form method="post" action="/admin/devices/<%= device.id %>/toggle">
+    <button class="btn-gradient" type="submit"><%= device.is_active ? t('disableDevice') : t('enableDevice') %></button>
+  </form>
+</section>
+<%- include('partials/footer') %>

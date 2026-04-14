@@ -1,0 +1,32 @@
+<%- include('partials/header', { title: t('dashboard') }) %>
+<div class="mobile-shell">
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <h2><%= t('dashboard') %></h2>
+      </div>
+    </div>
+    <section class="stats-grid two">
+      <div class="stat-card"><span><%= t('notifications') %></span><strong><%= alerts.length %></strong></div>
+      <div class="stat-card"><span><%= t('supportRequests') %></span><strong><%= tickets.length %></strong></div>
+      <div class="stat-card"><span><%= t('myDevices') %></span><strong>4</strong></div>
+      <div class="stat-card"><span><%= t('successRate') %></span><strong>99.9%</strong></div>
+    </section>
+  </section>
+
+  <section class="panel">
+    <h3><%= t('recentEvents') %></h3>
+    <div class="summary-list">
+      <% alerts.forEach(alert => { %>
+        <div class="summary-item">
+          <span>
+            <strong><%= rt(alert.title) %></strong><br>
+            <span class="mini"><%= rt(alert.subtitle) %></span>
+          </span>
+          <span class="badge <%= alert.status==='NEW'?'new':(alert.status==='IN_PROGRESS'?'progress':'solved') %>"><%= mapStatus(alert.status) %></span>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+</div>
+<%- include('partials/footer') %>

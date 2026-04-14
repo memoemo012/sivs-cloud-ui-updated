@@ -1,0 +1,28 @@
+<%- include('partials/header', { title: t('logs') }) %>
+<section class="panel">
+  <div class="panel-head"><h2><%= t('accessLogs') %></h2></div>
+  <form class="form-grid four" method="get">
+    <input name="q" value="<%= q %>" placeholder="<%= lang === 'ar' ? 'بحث (الاسم / الجهاز / رقم المحاولة)' : 'Search (name / device / attempt number)' %>"/>
+    <label><input type="checkbox" name="today" value="1" <%= today?'checked':'' %>/> <%= t('todayOnly') %></label>
+    <label><input type="checkbox" name="failed" value="1" <%= failed?'checked':'' %>/> <%= t('failedOnly') %></label>
+    <button class="btn-gradient"><%= t('filterAll') %></button>
+  </form>
+  <div class="list-grid">
+    <% if (!logs.length) { %><p><%= t('noLogs') %></p><% } %>
+    <% logs.forEach(log=>{ %>
+      <a href="/admin/logs/<%= log.id %>" class="log-card">
+        <div>
+          <strong><%= log.user_name %></strong>
+          <p><%= log.device_name %> • <%= rt(log.reason) %></p>
+          <span class="mini"><%= log.created_at %></span>
+        </div>
+        <div>
+          <span class="badge <%= log.result==='SUCCESS'?'solved':'high' %>"><%= mapResult(log.result) %></span>
+          <div class="spacer"></div>
+          <span class="mini"><%= log.attempt_code %></span>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+</section>
+<%- include('partials/footer') %>

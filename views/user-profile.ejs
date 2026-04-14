@@ -1,0 +1,36 @@
+<%- include('partials/header', { title: t('userProfile') }) %>
+<div class="mobile-shell app-mobile-shell">
+  <section class="settings-mobile">
+    <section class="settings-card card-like">
+      <div class="profile-head-card">
+        <div>
+          <strong class="profile-name"><%= user.full_name %></strong>
+          <div class="mini"><%= t('userId') %>: <%= user.user_code %></div>
+        </div>
+        <span class="badge solved"><%= t('verified') %></span>
+      </div>
+
+      <% if (!editing) { %>
+        <div class="summary-list profile-summary-list">
+          <div class="summary-item"><span><%= t('fullName') %></span><strong><%= user.full_name %></strong></div>
+          <div class="summary-item"><span><%= t('email') %></span><strong><%= user.email || '-' %></strong></div>
+          <div class="summary-item"><span><%= t('phone') %></span><strong><%= user.phone || '-' %></strong></div>
+          <div class="summary-item"><span><%= t('contact') %></span><strong><%= user.contact || '-' %></strong></div>
+        </div>
+        <div class="profile-actions-stack">
+          <a class="btn-gradient full" href="/user/profile/edit"><%= t('editData') %></a>
+        </div>
+      <% } else { %>
+        <form method="post" action="/user/profile" class="form-grid">
+          <input name="full_name" value="<%= user.full_name %>" placeholder="<%= t('fullName') %>" required />
+          <input name="email" value="<%= user.email || '' %>" placeholder="<%= t('email') %>" />
+          <input name="phone" value="<%= user.phone || '' %>" placeholder="<%= t('phone') %>" />
+          <input name="contact" value="<%= user.contact || '' %>" placeholder="<%= t('contact') %>" />
+          <button class="btn-gradient full"><%= t('save') %></button>
+          <a class="btn-soft full" href="/user/profile"><%= t('cancel') %></a>
+        </form>
+      <% } %>
+    </section>
+  </section>
+</div>
+<%- include('partials/footer') %>

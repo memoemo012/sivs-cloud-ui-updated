@@ -1,0 +1,60 @@
+<%- include('partials/header', { title: t('dashboard') }) %>
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h2><%= t('dashboard') %></h2>
+    </div>
+    <div class="row-actions">
+      <a class="btn-soft" href="/admin/alerts"><%= t('adminAlerts') %></a>
+      <a class="btn-gradient" href="/admin/users"><%= t('adminUsers') %></a>
+    </div>
+  </div>
+  <section class="stats-grid four">
+    <div class="stat-card"><span><%= t('newAlerts') %></span><strong><%= stats.alerts %></strong></div>
+    <div class="stat-card"><span><%= t('todayAttempts') %></span><strong><%= stats.attempts %></strong></div>
+    <div class="stat-card"><span><%= t('totalDevices') %></span><strong><%= stats.devices %></strong></div>
+    <div class="stat-card"><span><%= t('successRate') %></span><strong><%= stats.successRate %>%</strong></div>
+  </section>
+</section>
+<section class="grid-2">
+  <div class="panel">
+    <div class="panel-head"><h3><%= t('adminTools') %></h3></div>
+    <div class="stats-grid two">
+      <a class="list-card" href="/admin/alerts"><div><strong><%= t('alerts') %></strong><p class="mini"><%= t('adminAlerts') %></p></div><div class="icon-ball">!</div></a>
+      <a class="list-card" href="/admin/logs"><div><strong><%= t('logs') %></strong><p class="mini"><%= t('adminLogs') %></p></div><div class="icon-ball">#</div></a>
+      <a class="list-card" href="/admin/users"><div><strong><%= t('users') %></strong><p class="mini"><%= t('adminUsers') %></p></div><div class="icon-ball">U</div></a>
+      <a class="list-card" href="/admin/devices"><div><strong><%= t('devices') %></strong><p class="mini"><%= t('adminDevices') %></p></div><div class="icon-ball">D</div></a>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3><%= t('recentEvents') %></h3></div>
+    <div class="summary-list">
+      <% recentLogs.forEach(log=>{ %>
+        <a href="/admin/logs/<%= log.id %>" class="summary-item">
+          <span><strong><%= log.user_name %></strong><br><span class="mini"><%= rt(log.reason) %></span></span>
+          <span class="badge <%= log.result==='SUCCESS'?'solved':'high' %>"><%= mapResult(log.result) %></span>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<section class="panel">
+  <div class="panel-head"><h3><%= t('alerts') %></h3><a href="/admin/alerts" class="btn-soft"><%= t('viewAll') %></a></div>
+  <div class="list-grid">
+    <% recentAlerts.forEach(alert=>{ %>
+      <a href="/admin/alerts/<%= alert.id %>" class="alert-card">
+        <div>
+          <strong><%= rt(alert.title) %></strong>
+          <p><%= rt(alert.subtitle) %></p>
+          <span class="mini"><%= alert.user_name || '-' %></span>
+        </div>
+        <div>
+          <span class="badge <%= alert.severity==='HIGH'?'high':(alert.severity==='MEDIUM'?'medium':'low') %>"><%= mapSeverity(alert.severity) %></span>
+          <div class="spacer"></div>
+          <span class="badge <%= alert.status==='NEW'?'new':(alert.status==='IN_PROGRESS'?'progress':'solved') %>"><%= mapStatus(alert.status) %></span>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+</section>
+<%- include('partials/footer') %>

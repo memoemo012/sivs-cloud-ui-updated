@@ -1,0 +1,18 @@
+<%- include('partials/header', { title: t('supportPageTitle') }) %>
+<div class="mobile-shell app-mobile-shell">
+  <section class="settings-mobile">
+    <section class="settings-card card-like support-page-card">
+      <form method="post" action="/user/support" class="support-page-form">
+        <select name="issue_type" required>
+          <option value="" disabled selected><%= t('issuePlaceholder') %></option>
+          <% issueOptions.forEach((option) => { %>
+            <option value="<%= option.value %>"><%= option.label %></option>
+          <% }) %>
+        </select>
+        <textarea name="message" placeholder="<%= t('issueDescription') %>" required></textarea>
+        <button type="submit" class="btn-gradient full"><%= t('sendSupport') %></button>
+      </form>
+    </section>
+  </section>
+</div>
+<%- include('partials/footer') %>

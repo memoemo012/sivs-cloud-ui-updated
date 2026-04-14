@@ -1,0 +1,78 @@
+<%- include('partials/header', { title: t('usersMgmt') }) %>
+<section class="panel">
+  <div class="panel-head"><h2><%= t('addUser') %></h2></div>
+  <form method="post" action="/admin/users/add" class="form-grid four">
+    <input name="full_name" placeholder="<%= t('fullName') %>" required />
+    <input name="email" placeholder="<%= t('email') %>" />
+    <input name="phone" placeholder="<%= t('phone') %>" />
+    <input name="contact" placeholder="<%= t('contact') %>" />
+    <input name="password" placeholder="<%= t('password') %>" />
+    <input name="finger_id" placeholder="<%= t('fingerId') %>" />
+    <button class="btn-gradient" type="submit"><%= t('createUser') %></button>
+  </form>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2><%= t('usersMgmt') %></h2></div>
+  <div class="list-grid compact-users-grid">
+    <% users.forEach(user=>{ %>
+      <div class="list-card compact-user-card" data-user-modal="userModal<%= user.id %>">
+        <div>
+          <strong><%= user.full_name %></strong>
+          <p class="mini"><%= t('fingerId') %>: <%= user.finger_id || '-' %></p>
+        </div>
+        <span class="badge <%= user.status==='ACTIVE'?'solved':'progress' %>"><%= mapStatus(user.status) %></span>
+      </div>
+
+      <div class="modal-overlay" id="userModal<%= user.id %>" hidden>
+        <div class="modal-sheet modal-large">
+          <div class="modal-handle"></div>
+          <div class="panel-head modal-head-tight">
+            <h3><%= user.full_name %></h3>
+            <button type="button" class="btn-soft close-user-modal" data-close="userModal<%= user.id %>"><%= t('close') %></button>
+          </div>
+          <form method="post" action="/admin/users/<%= user.id %>/update" class="form-grid two">
+            <input name="full_name" value="<%= user.full_name %>" placeholder="<%= t('fullName') %>" />
+            <input name="contact" value="<%= user.contact || '' %>" placeholder="<%= t('contact') %>" />
+            <input name="email" value="<%= user.email || '' %>" placeholder="<%= t('email') %>" />
+            <input name="phone" value="<%= user.phone || '' %>" placeholder="<%= t('phone') %>" />
+            <select name="status">
+              <option value="ACTIVE" <%= user.status==='ACTIVE'?'selected':'' %>><%= t('active') %></option>
+              <option value="SUSPENDED" <%= user.status==='SUSPENDED'?'selected':'' %>><%= t('suspended') %></option>
+            </select>
+            <input name="finger_id" value="<%= user.finger_id || '' %>" placeholder="<%= t('fingerId') %>" />
+            <input type="hidden" name="password" value="<%= user.password %>" />
+            <div class="summary-list modal-details-list">
+              <div class="summary-item"><span><%= t('faceId') %></span><strong><%= user.face_id %></strong></div>
+              <div class="summary-item"><span><%= t('cmdId') %></span><strong><%= user.cmd_id %></strong></div>
+            </div>
+            <button class="btn-gradient" type="submit"><%= t('save') %></button>
+          </form>
+          <form method="post" action="/admin/users/<%= user.id %>/delete" onsubmit="return confirm('<%= lang === 'ar' ? 'حذف المستخدم؟' : 'Delete user?' %>')" style="margin-top:12px;">
+            <button class="btn-danger" type="submit"><%= t('delete') %></button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('[data-user-modal]').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.getAttribute('data-user-modal');
+      const modal = document.getElementById(id);
+      if(modal) modal.hidden = false;
+    });
+  });
+  document.querySelectorAll('.close-user-modal').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const modal = document.getElementById(btn.getAttribute('data-close'));
+      if(modal) modal.hidden = true;
+    });
+  });
+  document.querySelectorAll('.modal-overlay').forEach(modal => {
+    modal.addEventListener('click', (e)=>{ if(e.target===modal) modal.hidden = true; });
+  });
+</script>
+<%- include('partials/footer') %>

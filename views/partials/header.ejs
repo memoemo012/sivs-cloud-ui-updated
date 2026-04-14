@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>" dir="<%= dir %>">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= title %> - <%= t('siteName') %></title>
+  <link rel="stylesheet" href="/public/styles.css"/>
+</head>
+<body class="<%= session.role === 'user' ? 'user-app-body' : '' %>">
+<% if (session.role === 'user') { %>
+  <header class="topbar user-topbar">
+    <div class="brand compact-brand">
+      <img src="/public/logo.jpg" class="logo compact-logo" alt="TriGuard logo"/>
+      <div>
+        <h1><%= t('siteName') %></h1>
+        <p><%= t('siteTag') %></p>
+      </div>
+    </div>
+    <div class="lang-switch compact user-lang-switch">
+      <a href="/lang/ar">العربية</a>
+      <a href="/lang/en">English</a>
+    </div>
+  </header>
+  <nav class="nav-shell user-nav-shell">
+    <a class="<%= currentPath.startsWith('/user/profile') ? 'active' : '' %>" href="/user/profile"><%= t('profile') %></a>
+    <a class="<%= currentPath.startsWith('/user/notifications') ? 'active' : '' %>" href="/user/notifications"><%= t('notifications') %></a>
+    <a class="<%= currentPath.startsWith('/user/support') ? 'active' : '' %>" href="/user/support"><%= t('support') %></a>
+    <a class="<%= currentPath.startsWith('/user/settings') ? 'active' : '' %>" href="/user/settings"><%= t('settings') %></a>
+    <a href="/logout"><%= t('logout') %></a>
+  </nav>
+<% } else { %>
+  <header class="topbar">
+    <div class="brand">
+      <img src="/public/logo.jpg" class="logo" alt="TriGuard logo"/>
+      <div>
+        <h1><%= t('siteName') %></h1>
+        <p><%= t('siteTag') %></p>
+      </div>
+    </div>
+    <div class="lang-switch">
+      <a href="/lang/ar">العربية</a>
+      <a href="/lang/en">English</a>
+    </div>
+  </header>
+<% } %>
+<% if (session.role === 'admin') { %>
+  <nav class="nav-shell">
+    <a class="<%= currentPath.startsWith('/admin/dashboard')?'active':'' %>" href="/admin/dashboard"><%= t('dashboard') %></a>
+    <a class="<%= currentPath.startsWith('/admin/alerts')?'active':'' %>" href="/admin/alerts"><%= t('alerts') %></a>
+    <a class="<%= currentPath.startsWith('/admin/logs')?'active':'' %>" href="/admin/logs"><%= t('logs') %></a>
+    <a class="<%= currentPath.startsWith('/admin/users')?'active':'' %>" href="/admin/users"><%= t('users') %></a>
+    <a class="<%= currentPath.startsWith('/admin/devices')?'active':'' %>" href="/admin/devices"><%= t('devices') %></a>
+    <a class="<%= currentPath.startsWith('/admin/support')?'active':'' %>" href="/admin/support"><%= t('support') %></a>
+    <a class="<%= currentPath.startsWith('/admin/settings')?'active':'' %>" href="/admin/settings"><%= t('settings') %></a>
+    <a href="/logout"><%= t('logout') %></a>
+  </nav>
+<% } %>
+<main class="page-shell <%= session.role === 'user' ? 'user-page-shell' : '' %>">
+  <% if (flash) { %><div class="flash"><%= flash %></div><% } %>

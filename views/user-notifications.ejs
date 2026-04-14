@@ -1,0 +1,33 @@
+<%- include('partials/header', { title: t('notifications') }) %>
+<div class="mobile-shell app-mobile-shell">
+  <section class="settings-mobile">
+    <div class="screen-label"><%= t('notifications') %></div>
+    <% if (!alerts || alerts.length === 0) { %>
+      <section class="settings-card card-like empty-state-card">
+        <h3><%= t('noNotificationsYet') %></h3>
+        <p><%= t('noNotificationsBody') %></p>
+      </section>
+    <% } else { %>
+      <% alerts.forEach(function(alert) { %>
+        <section class="settings-card card-like notification-card">
+          <div class="panel-head no-margin">
+            <div>
+              <strong><%= rt(alert.title) || '-' %></strong>
+              <p class="mini"><%= rt(alert.subtitle) || '-' %></p>
+            </div>
+            <div class="notification-badges">
+              <span class="badge <%= alert.severity === 'HIGH' ? 'high' : (alert.severity === 'MEDIUM' ? 'medium' : 'low') %>"><%= mapSeverity(alert.severity) || '-' %></span>
+              <span class="badge <%= alert.status === 'NEW' ? 'new' : (alert.status === 'IN_PROGRESS' ? 'progress' : 'solved') %>"><%= mapStatus(alert.status) %></span>
+            </div>
+          </div>
+          <div class="mini"><%= alert.device_name || '-' %> • <%= alert.created_at || '-' %></div>
+          <p><strong><%= t('notificationDetails') %>:</strong> <%= rt(alert.details) || '-' %></p>
+          <% if (alert.admin_notes) { %>
+            <p><strong><%= t('adminNotes') %>:</strong> <%= rt(alert.admin_notes) %></p>
+          <% } %>
+        </section>
+      <% }) %>
+    <% } %>
+  </section>
+</div>
+<%- include('partials/footer') %>
